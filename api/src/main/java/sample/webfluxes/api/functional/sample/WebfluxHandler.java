@@ -4,15 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-import sample.webfluxes.api.service.ReadService;
+import sample.webfluxes.api.service.MasterService;
 
 //@Component
 @Slf4j
 public class WebfluxHandler {
 
-    ReadService elasticsearchService;
+    MasterService elasticsearchService;
 
-    public WebfluxHandler(ReadService elasticsearchService) {
+    public WebfluxHandler(MasterService elasticsearchService) {
 
         this.elasticsearchService = elasticsearchService;
     }
@@ -21,7 +21,7 @@ public class WebfluxHandler {
 
 //        String index = request.pathVariable("index");
 //        return ServerResponse.ok().contentType(MediaType.TEXT_PLAIN)
-//                             .body(BodyInserters.fromObject(elasticsearchService.indexMapping(index).toString()));
+//                             .body(BodyInserters.fromObject(elasticsearchService.indexInfo(index).toString()));
         return null;
     }
 

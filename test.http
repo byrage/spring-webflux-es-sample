@@ -5,11 +5,11 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
-### shop mapping
+### index info
 GET http://localhost:8080/shop
 
-### shop es
-GET http://localhost:9200/shop
+### create index
+POST http://localhost:8080/shop112
 
 ### fail mapping
 GET http://localhost:8080/fail
@@ -21,6 +21,6 @@ GET http://localhost:8080/shop/12345
 GET http://localhost:8080/test
 
 ### index
-POST http://localhost:8080/shop/12345
+POST http://localhost:8080/shop112/12345
 
 ###

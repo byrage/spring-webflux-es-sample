@@ -9,7 +9,8 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.*;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import sample.webfluxes.core.dto.ShopDto;
+import sample.webfluxes.core.entity.Shop;
+import sample.webfluxes.core.exception.ReplicationFailedException;
 
 import java.io.IOException;
 
@@ -27,19 +28,18 @@ public class FullIndexService {
     public Mono<String> shopFullIndex(String index, String id) {
 
         final String type = "_doc";
-        XContentBuilder shopXContent = null;
+        XContentBuilder source = null;
         try {
-            shopXContent = ShopDto.dummy(id).xContent();
-            log.info("shopXContent={}", shopXContent);
+            source = Shop.dummy(id).source();
         } catch (IOException e) {
-            log.error("xContentBuilder error.", e);
+            log.error("xContent build error.", e);
         }
 
         IndexRequest request = Requests.indexRequest(index)
                                        .type(type)
                                        .id(id)
-                                       .source(shopXContent)
-                                       .opType(DocWriteRequest.OpType.INDEX)
+                                       .source(source)
+                                       .opType(DocWriteRequest.OpType.INDEX) // CREATE OR UPDATE
                                        .timeout(TimeValue.timeValueSeconds(3));
 
         return Mono.create(
@@ -53,8 +53,10 @@ public class FullIndexService {
                                 if (shardInfo.getFailed() > 0) {
                                     for (ReplicationResponse.ShardInfo.Failure failure :
                                             shardInfo.getFailures()) {
-                                        log.error("index failed. failure={}", failure);
+                                        log.error("replication failed. failure={}", failure);
                                     }
+                                    sink.error(new ReplicationFailedException());
+                                    return;
                                 }
 
                                 log.info("index request completed. result={}, full response={}", response.getResult(), response);

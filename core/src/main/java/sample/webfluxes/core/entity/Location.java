@@ -1,4 +1,4 @@
-package sample.webfluxes.core.dto;
+package sample.webfluxes.core.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
