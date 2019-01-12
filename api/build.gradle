@@ -13,4 +13,8 @@ repositories {
 
 dependencies {
     compile project(':core')
+
+    // TODO : separate from api
+    compile project(':delta-indexer')
+    compile project(':full-indexer')
 }

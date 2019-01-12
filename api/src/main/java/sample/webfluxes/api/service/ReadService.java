@@ -1,4 +1,4 @@
-package sample.webfluxes.core.service;
+package sample.webfluxes.api.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.*;
@@ -14,13 +14,13 @@ import java.io.IOException;
 
 @Slf4j
 @Service
-public class ElasticsearchService {
+public class ReadService {
 
     public final static String DEFAULT_MAPPING_TYPE = "_doc";
 
     private RestHighLevelClient client;
 
-    public ElasticsearchService(RestHighLevelClient client) {
+    public ReadService(RestHighLevelClient client) {
 
         this.client = client;
     }

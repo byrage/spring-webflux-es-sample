@@ -1,7 +1,12 @@
 package sample.webfluxes.core.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class Location {
 
-    float latitude;
-    float longitude;
+    double lat;
+    double lon;
 }

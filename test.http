@@ -15,9 +15,12 @@ GET http://localhost:9200/shop
 GET http://localhost:8080/fail
 
 ### shop get
-GET http://localhost:8080/shop/1
+GET http://localhost:8080/shop/12345
 
 ### test
 GET http://localhost:8080/test
+
+### index
+POST http://localhost:8080/shop/12345
 
 ###

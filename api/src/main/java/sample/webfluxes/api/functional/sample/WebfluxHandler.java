@@ -1,20 +1,18 @@
 package sample.webfluxes.api.functional.sample;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-import sample.webfluxes.core.service.ElasticsearchService;
+import sample.webfluxes.api.service.ReadService;
 
 //@Component
 @Slf4j
 public class WebfluxHandler {
 
-    ElasticsearchService elasticsearchService;
+    ReadService elasticsearchService;
 
-    public WebfluxHandler(ElasticsearchService elasticsearchService) {
+    public WebfluxHandler(ReadService elasticsearchService) {
 
         this.elasticsearchService = elasticsearchService;
     }
