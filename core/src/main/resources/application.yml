@@ -1,0 +1,28 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring:
+  profiles: local
+
+elasticsearch:
+  client:
+    search:
+      hostnames: localhost
+      port: 9200
+      connection-request-timeout-mills: 3000
+      socket-timeout-mills: 3000
+      connect-timeout-mills: 3000
+    index:
+
+
+logging:
+  level:
+    org.springframework: INFO
+    sample: DEBUG
+    org.springframework.web.reactive: DEBUG
+
+---
+spring:
+  profiles: real

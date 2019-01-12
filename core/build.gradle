@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+ext {
+    elasticsearchVersion = '6.5.1'
+}
+
+group 'com.example'
+version '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.elasticsearch.client:elasticsearch-rest-high-level-client:${elasticsearchVersion}"
+    compile "org.elasticsearch:elasticsearch:${elasticsearchVersion}"
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="reactor" level="DEBUG"/>
+
+    <logger name="org.elasticsearch" level="DEBUG"/>
+
+    <logger name="sample.webfluxes" level="INFO"/>
+</configuration>

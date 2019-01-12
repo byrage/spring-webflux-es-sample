@@ -1,0 +1,6 @@
+rootProject.name = 'spring-webflux-es-sample'
+include 'core'
+include 'api'
+include 'full-indexer'
+include 'delta-indexer'
+
