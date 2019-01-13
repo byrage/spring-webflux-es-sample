@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import sample.webfluxes.core.entity.Shop;
 
+import java.io.IOException;
+
 @Slf4j
 @Service
 public class MasterService {
@@ -52,11 +54,19 @@ public class MasterService {
 
     public Mono<String> createIndex(String indexName) {
 
+        String scheme;
+        try {
+            scheme = Shop.scheme();
+        } catch (IOException e) {
+            log.error("fetching scheme failed", e);
+            return Mono.error(e);
+        }
+
         CreateIndexRequest request = new CreateIndexRequest(indexName)
                 .settings(Settings.builder()
                                   .put("index.number_of_shards", 1)
                                   .put("index.number_of_replicas", 0))
-                .mapping("_doc", Shop.mapping(), XContentType.JSON);
+                .mapping("_doc", scheme, XContentType.JSON);
 
         return Mono.create(sink -> client.indices().createAsync(request, RequestOptions.DEFAULT, new ActionListener<CreateIndexResponse>() {
 
@@ -77,7 +87,7 @@ public class MasterService {
         }));
     }
 
-    public Mono<String> docs(String index, String id) {
+    public Mono<String> getDocs(String index, String id) {
 
         GetRequest getRequest = new GetRequest().index(index).type(DEFAULT_MAPPING_TYPE).id(id);
         RequestOptions requestOptions = RequestOptions.DEFAULT;

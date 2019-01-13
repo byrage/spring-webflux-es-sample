@@ -20,7 +20,10 @@ GET http://localhost:8080/shop/12345
 ### test
 GET http://localhost:8080/test
 
-### index
+### create index
+POST http://localhost:8080/shop112
+
+### create docs
 POST http://localhost:8080/shop112/12345
 
 ###

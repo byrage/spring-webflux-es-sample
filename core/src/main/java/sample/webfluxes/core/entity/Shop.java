@@ -3,8 +3,11 @@ package sample.webfluxes.core.entity;
 import lombok.*;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 
 @Getter
@@ -46,6 +49,17 @@ public class Shop {
         return shopDto;
     }
 
+    public static String scheme() throws IOException {
+
+        StringBuilder scheme = new StringBuilder();
+        File resource = new ClassPathResource("scheme/shop.json").getFile();
+        Files.readAllLines(resource.toPath()).forEach(
+                line -> scheme.append(line).append("\n")
+        );
+
+        return scheme.toString();
+    }
+
     public XContentBuilder source() throws IOException {
 
         XContentBuilder builder = XContentFactory.jsonBuilder();
@@ -71,141 +85,5 @@ public class Shop {
         builder.endObject();
 
         return builder;
-    }
-
-    // TODO : JSON 파일 읽어오도록
-    public static String mapping() {
-
-        return "{\n"
-                + "\"_doc\": {\n"
-                + "        \"properties\": {\n"
-                + "          \"address\": {\n"
-                + "            \"type\": \"text\",\n"
-                + "            \"fields\": {\n"
-                + "              \"keyword\": {\n"
-                + "                \"type\": \"keyword\",\n"
-                + "                \"ignore_above\": 256\n"
-                + "              }\n"
-                + "            }\n"
-                + "          },\n"
-                + "          \"block\": {\n"
-                + "            \"type\": \"boolean\"\n"
-                + "          },\n"
-                + "          \"campaignId\": {\n"
-                + "            \"type\": \"text\",\n"
-                + "            \"fields\": {\n"
-                + "              \"keyword\": {\n"
-                + "                \"type\": \"keyword\",\n"
-                + "                \"ignore_above\": 256\n"
-                + "              }\n"
-                + "            }\n"
-                + "          },\n"
-                + "          \"categoryCode\": {\n"
-                + "            \"type\": \"text\",\n"
-                + "            \"fields\": {\n"
-                + "              \"keyword\": {\n"
-                + "                \"type\": \"keyword\",\n"
-                + "                \"ignore_above\": 256\n"
-                + "              }\n"
-                + "            }\n"
-                + "          },\n"
-                + "          \"delete\": {\n"
-                + "            \"type\": \"boolean\"\n"
-                + "          },\n"
-                + "          \"favoriteCount\": {\n"
-                + "            \"type\": \"long\"\n"
-                + "          },\n"
-                + "          \"id\": {\n"
-                + "            \"type\": \"integer\"\n"
-                + "          },\n"
-                + "          \"like\": {\n"
-                + "            \"type\": \"text\",\n"
-                + "            \"fields\": {\n"
-                + "              \"keyword\": {\n"
-                + "                \"type\": \"keyword\",\n"
-                + "                \"ignore_above\": 256\n"
-                + "              }\n"
-                + "            }\n"
-                + "          },\n"
-                + "          \"modificationDate\": {\n"
-                + "            \"type\": \"date\"\n"
-                + "          },\n"
-                + "          \"name\": {\n"
-                + "            \"type\": \"text\",\n"
-                + "            \"fields\": {\n"
-                + "              \"keyword\": {\n"
-                + "                \"type\": \"keyword\",\n"
-                + "                \"ignore_above\": 256\n"
-                + "              }\n"
-                + "            }\n"
-                + "          },\n"
-                + "          \"no_store\": {\n"
-                + "            \"type\": \"keyword\"\n"
-                + "          },\n"
-                + "          \"query\": {\n"
-                + "            \"properties\": {\n"
-                + "              \"term\": {\n"
-                + "                \"properties\": {\n"
-                + "                  \"id\": {\n"
-                + "                    \"type\": \"long\"\n"
-                + "                  }\n"
-                + "                }\n"
-                + "              }\n"
-                + "            }\n"
-                + "          },\n"
-                + "          \"realLocation\": {\n"
-                + "            \"properties\": {\n"
-                + "              \"lat\": {\n"
-                + "                \"type\": \"float\"\n"
-                + "              },\n"
-                + "              \"lon\": {\n"
-                + "                \"type\": \"float\"\n"
-                + "              }\n"
-                + "            }\n"
-                + "          },\n"
-                + "          \"region3Code\": {\n"
-                + "            \"type\": \"text\",\n"
-                + "            \"fields\": {\n"
-                + "              \"keyword\": {\n"
-                + "                \"type\": \"keyword\",\n"
-                + "                \"ignore_above\": 256\n"
-                + "              }\n"
-                + "            }\n"
-                + "          },\n"
-                + "          \"shopNumber\": {\n"
-                + "            \"type\": \"text\",\n"
-                + "            \"fields\": {\n"
-                + "              \"keyword\": {\n"
-                + "                \"type\": \"keyword\",\n"
-                + "                \"ignore_above\": 256\n"
-                + "              }\n"
-                + "            }\n"
-                + "          },\n"
-                + "          \"starAvgScore\": {\n"
-                + "            \"type\": \"float\"\n"
-                + "          },\n"
-                + "          \"store\": {\n"
-                + "            \"type\": \"keyword\",\n"
-                + "            \"store\": true\n"
-                + "          },\n"
-                + "          \"stored_fields\": {\n"
-                + "            \"type\": \"text\",\n"
-                + "            \"fields\": {\n"
-                + "              \"keyword\": {\n"
-                + "                \"type\": \"keyword\",\n"
-                + "                \"ignore_above\": 256\n"
-                + "              }\n"
-                + "            }\n"
-                + "          },\n"
-                + "          \"use\": {\n"
-                + "            \"type\": \"boolean\"\n"
-                + "          },\n"
-                + "          \"viewCount\": {\n"
-                + "            \"type\": \"long\"\n"
-                + "          }\n"
-                + "        }\n"
-                + "      }\n"
-                + "}";
-
     }
 }

@@ -25,7 +25,7 @@ public class FullIndexService {
         this.client = client;
     }
 
-    public Mono<String> shopFullIndex(String index, String id) {
+    public Mono<String> createDocs(String index, String id) {
 
         final String type = "_doc";
         XContentBuilder source = null;

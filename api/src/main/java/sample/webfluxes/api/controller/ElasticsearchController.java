@@ -20,7 +20,7 @@ public class ElasticsearchController {
     }
 
     @GetMapping("/{index}")
-    public Mono<String> indexMapping(@PathVariable String index) {
+    public Mono<String> getIndexMapping(@PathVariable String index) {
 
         return masterService.indexInfo(index);
     }
@@ -32,15 +32,15 @@ public class ElasticsearchController {
     }
 
     @GetMapping("/{index}/{id}")
-    public Mono<String> docs(@PathVariable String index, @PathVariable String id) {
+    public Mono<String> getDocs(@PathVariable String index, @PathVariable String id) {
 
-        return masterService.docs(index, id);
+        return masterService.getDocs(index, id);
     }
 
     @PostMapping("/{index}/{id}")
-    public Mono<String> index(@PathVariable String index, @PathVariable String id) {
+    public Mono<String> createDocs(@PathVariable String index, @PathVariable String id) {
 
-       return fullIndexService.shopFullIndex(index, id);
+       return fullIndexService.createDocs(index, id);
     }
 
     @GetMapping("/test")

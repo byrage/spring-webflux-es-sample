@@ -66,6 +66,17 @@ public class ElasticsearchControllerTest {
     @Test
     public void createIndex() {
 
+        webTestClient.post().uri("/{index}", "shop232311")
+                     .accept(MediaType.APPLICATION_JSON)
+                     .exchange()
+                     .expectStatus()
+                     .isOk();
+
+    }
+
+    @Test
+    public void createDocument() {
+
         webTestClient.post().uri("/{index}/{id}", "shop", "1234")
                      .accept(MediaType.APPLICATION_JSON)
                      .exchange()
