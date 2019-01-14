@@ -23,7 +23,22 @@ GET http://localhost:8080/test
 ### create index
 POST http://localhost:8080/shop112
 
-### create docs
-POST http://localhost:8080/shop112/12345
+### delta index
+POST http://localhost:8080/shop/delta
+Content-Type: application/json
+
+{
+    "id" : "99998"
+}
+
+
+### full index
+POST http://localhost:8080/shop/full
+Content-Type: application/json
+
+{
+    "startId" : "1",
+    "endId" : "10"
+}
 
 ###

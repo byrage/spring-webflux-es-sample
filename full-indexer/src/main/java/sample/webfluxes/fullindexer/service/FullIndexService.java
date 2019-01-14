@@ -1,18 +1,20 @@
 package sample.webfluxes.fullindexer.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.action.*;
-import org.elasticsearch.action.index.*;
-import org.elasticsearch.action.support.replication.ReplicationResponse;
-import org.elasticsearch.client.*;
-import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.common.xcontent.*;
+import org.elasticsearch.action.ActionListener;
+import org.elasticsearch.action.bulk.*;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.*;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import sample.webfluxes.core.entity.Shop;
-import sample.webfluxes.core.exception.ReplicationFailedException;
+import sample.webfluxes.core.exception.BulkFailedException;
 
 import java.io.IOException;
+import java.util.function.BiConsumer;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Service
@@ -25,52 +27,64 @@ public class FullIndexService {
         this.client = client;
     }
 
-    public Mono<String> createDocs(String index, String id) {
+    public Mono<String> index(String index, int start, int end) {
 
         final String type = "_doc";
-        XContentBuilder source = null;
-        try {
-            source = Shop.dummy(id).source();
-        } catch (IOException e) {
-            log.error("xContent build error.", e);
-        }
 
-        IndexRequest request = Requests.indexRequest(index)
-                                       .type(type)
-                                       .id(id)
-                                       .source(source)
-                                       .opType(DocWriteRequest.OpType.INDEX) // CREATE OR UPDATE
-                                       .timeout(TimeValue.timeValueSeconds(3));
+        return Mono.create(sink -> {
 
-        return Mono.create(
-                sink -> client.indexAsync(
-                        request, RequestOptions.DEFAULT, new ActionListener<IndexResponse>() {
+            BulkProcessor.Listener listener = new BulkProcessor.Listener() {
 
-                            @Override
-                            public void onResponse(IndexResponse response) {
+                @Override
+                public void beforeBulk(long executionId, BulkRequest request) {
 
-                                ReplicationResponse.ShardInfo shardInfo = response.getShardInfo();
-                                if (shardInfo.getFailed() > 0) {
-                                    for (ReplicationResponse.ShardInfo.Failure failure :
-                                            shardInfo.getFailures()) {
-                                        log.error("replication failed. failure={}", failure);
-                                    }
-                                    sink.error(new ReplicationFailedException());
-                                    return;
-                                }
+                    int numberOfActions = request.numberOfActions();
+                    log.debug("Executing bulk [{}] with {} requests",
+                              executionId, numberOfActions);
+                }
 
-                                log.info("index request completed. result={}, full response={}", response.getResult(), response);
-                                sink.success(response.toString());
-                            }
+                @Override
+                public void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
 
-                            @Override
-                            public void onFailure(Exception e) {
+                    if (response.hasFailures()) {
+                        log.warn("Bulk [{}] executed with failures", executionId);
+                        sink.error(new BulkFailedException());
+                    } else {
+                        log.info("Bulk [{}] completed in {} milliseconds",
+                                 executionId, response.getTook().getMillis());
+                        sink.success(response.toString());
 
-                                log.info("index request failed.", e);
-                                sink.error(e);
-                            }
+                    }
+                }
+
+                @Override
+                public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
+
+                    log.error("Failed to execute bulk", failure);
+                    sink.error(new BulkFailedException());
+                }
+            };
+
+            BiConsumer<BulkRequest, ActionListener<BulkResponse>> bulkConsumer =
+                    (request, bulkListener) -> client.bulkAsync(request, RequestOptions.DEFAULT, bulkListener);
+            BulkProcessor bulkProcessor = BulkProcessor.builder(bulkConsumer, listener)
+                                                       .setBulkActions(500)
+                                                       .setBulkSize(new ByteSizeValue(1L, ByteSizeUnit.MB))
+                                                       .setConcurrentRequests(0)
+                                                       .setFlushInterval(TimeValue.timeValueSeconds(10L))
+                                                       .setBackoffPolicy(BackoffPolicy.constantBackoff(TimeValue.timeValueSeconds(1L), 3))
+                                                       .build();
+
+            IntStream.range(start, end + 1).forEach(
+                    num -> {
+                        try {
+                            Shop shop = Shop.dummy(String.valueOf(num));
+                            bulkProcessor.add(new IndexRequest(index, type, shop.getCampaignId()).source(shop.source()));
+                        } catch (IOException e) {
+                            log.error("xContent build error. id={}", num, e);
                         }
-                )
-        );
+                    });
+        });
     }
+
 }

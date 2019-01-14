@@ -8,6 +8,7 @@ import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.settings.Settings;
@@ -110,4 +111,14 @@ public class MasterService {
             }
         }));
     }
+
+/*    public Mono<String> search(String index, SearchDto searchDto) {
+
+
+        SearchRequest searchRequest = new SearchRequestBuilder(client);
+
+        return Mono.create(sink -> {
+            client.searchAsync();
+        });
+    }*/
 }

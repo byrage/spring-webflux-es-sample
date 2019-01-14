@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -75,9 +76,33 @@ public class ElasticsearchControllerTest {
     }
 
     @Test
-    public void createDocument() {
+    public void deltaIndex() {
 
-        webTestClient.post().uri("/{index}/{id}", "shop", "1234")
+        String body = "{\n"
+                + "    \"id\" : \"99998\"\n"
+                + "}";
+
+        webTestClient.post().uri("/{index}/delta", "shop")
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(BodyInserters.fromObject(body))
+                     .accept(MediaType.APPLICATION_JSON)
+                     .exchange()
+                     .expectStatus()
+                     .isOk();
+
+    }
+
+    @Test
+    public void fullIndex() {
+
+        String body = "{\n"
+                + "    \"startId\" : \"1\",\n"
+                + "    \"endId\" : \"10\"\n"
+                + "}";
+
+        webTestClient.post().uri("/{index}/full", "shop")
+                     .contentType(MediaType.APPLICATION_JSON)
+                     .body(BodyInserters.fromObject(body))
                      .accept(MediaType.APPLICATION_JSON)
                      .exchange()
                      .expectStatus()
