@@ -12,11 +12,11 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class ElasticsearchConfig {
 
-    @Bean
-    @ConfigurationProperties(prefix = "elasticsearch.client.search")
-    public SearchClientNodeProperty searchClientNodeProperty() {
+    final private SearchClientNodeProperty searchClientNodeProperty;
 
-        return new SearchClientNodeProperty();
+    public ElasticsearchConfig(SearchClientNodeProperty searchClientNodeProperty) {
+
+        this.searchClientNodeProperty = searchClientNodeProperty;
     }
 
     @Bean

@@ -8,8 +8,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Location {
 
-    @JsonProperty
     Double lat;
-    @JsonProperty
     Double lon;
 }

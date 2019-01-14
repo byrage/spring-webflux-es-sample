@@ -9,7 +9,7 @@
 GET http://localhost:8080/shop
 
 ### create index
-POST http://localhost:8080/shop112
+POST http://localhost:8080/shoptest
 
 ### fail mapping
 GET http://localhost:8080/fail
@@ -24,7 +24,7 @@ GET http://localhost:8080/test
 POST http://localhost:8080/shop112
 
 ### delta index
-POST http://localhost:8080/shop/delta
+POST http://localhost:8080/shoptest/delta
 Content-Type: application/json
 
 {

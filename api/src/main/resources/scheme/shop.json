@@ -1,79 +1,29 @@
 {
     "_doc":{
         "properties":{
-            "address":{
-                "type":"text",
-                "fields":{
-                    "keyword":{
-                        "type":"keyword",
-                        "ignore_above":256
-                    }
-                }
+            "campaignId":{
+                "type":"keyword"
+            },
+            "shopNumber":{
+                "type":"keyword"
+            },
+            "use":{
+                "type":"boolean"
             },
             "block":{
                 "type":"boolean"
             },
-            "campaignId":{
-                "type":"text",
-                "fields":{
-                    "keyword":{
-                        "type":"keyword",
-                        "ignore_above":256
-                    }
-                }
-            },
-            "categoryCode":{
-                "type":"text",
-                "fields":{
-                    "keyword":{
-                        "type":"keyword",
-                        "ignore_above":256
-                    }
-                }
-            },
             "delete":{
                 "type":"boolean"
             },
-            "favoriteCount":{
-                "type":"long"
-            },
-            "id":{
-                "type":"integer"
-            },
-            "like":{
-                "type":"text",
-                "fields":{
-                    "keyword":{
-                        "type":"keyword",
-                        "ignore_above":256
-                    }
-                }
-            },
-            "modificationDate":{
-                "type":"date"
-            },
-            "name":{
-                "type":"text",
-                "fields":{
-                    "keyword":{
-                        "type":"keyword",
-                        "ignore_above":256
-                    }
-                }
-            },
-            "no_store":{
+            "categoryCode":{
                 "type":"keyword"
             },
-            "query":{
-                "properties":{
-                    "term":{
-                        "properties":{
-                            "id":{
-                                "type":"long"
-                            }
-                        }
-                    }
-                }
+            "address":{
+                "type":"keyword"
+            },
+            "region3Code":{
+                "type":"keyword"
             },
             "realLocation":{
                 "properties":{
@@ -85,45 +35,17 @@
                     }
                 }
             },
-            "region3Code":{
-                "type":"text",
-                "fields":{
-                    "keyword":{
-                        "type":"keyword",
-                        "ignore_above":256
-                    }
-                }
-            },
-            "shopNumber":{
-                "type":"text",
-                "fields":{
-                    "keyword":{
-                        "type":"keyword",
-                        "ignore_above":256
-                    }
-                }
-            },
-            "starAvgScore":{
-                "type":"float"
-            },
-            "store":{
-                "type":"keyword",
-                "store":true
-            },
-            "stored_fields":{
-                "type":"text",
-                "fields":{
-                    "keyword":{
-                        "type":"keyword",
-                        "ignore_above":256
-                    }
-                }
-            },
-            "use":{
-                "type":"boolean"
+            "favoriteCount":{
+                "type":"long"
             },
             "viewCount":{
                 "type":"long"
+            },
+            "starAverageScore":{
+                "type":"float"
+            },
+            "modificationDate":{
+                "type":"date"
             }
         }
     }
