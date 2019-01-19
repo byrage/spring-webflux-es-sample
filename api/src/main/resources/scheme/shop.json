@@ -22,7 +22,7 @@
             "address":{
                 "type":"keyword"
             },
-            "region3Code":{
+            "regionCode":{
                 "type":"keyword"
             },
             "realLocation":{

@@ -5,6 +5,7 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import sample.webfluxes.api.dto.SearchParam;
 import sample.webfluxes.api.service.MasterService;
 import sample.webfluxes.deltaindexer.service.DeltaIndexService;
 import sample.webfluxes.fullindexer.service.FullIndexService;
@@ -64,12 +65,17 @@ public class ElasticsearchController {
         return deltaIndexService.index(index, id);
     }
 
-/*    @PostMapping("/{index}/search")
-    public Mono<String> search(@PathVariable String index, @RequestBody SearchDto searchDto) {
+    @PostMapping("/{index}/search")
+    public Mono<String> search(@PathVariable String index, @RequestBody SearchParam searchParam) {
 
-        return masterService.search(index, searchDto);
-    }*/
+        return masterService.search(index, searchParam);
+    }
 
+    @DeleteMapping("/{index}")
+    public Mono<String> delete(@PathVariable String index) {
+
+        return masterService.delete(index);
+    }
 
     @GetMapping("/test")
     public Mono<String> test() {

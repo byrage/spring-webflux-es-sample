@@ -6,15 +6,22 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.xcontent.*;
+import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import sample.webfluxes.api.dto.SearchParam;
 import sample.webfluxes.core.entity.Shop;
 
 import java.io.IOException;
@@ -112,13 +119,52 @@ public class MasterService {
         }));
     }
 
-/*    public Mono<String> search(String index, SearchDto searchDto) {
+    public Mono<String> search(String index, SearchParam searchParam) {
 
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.from(searchParam.getPage().getOffset());
+        searchSourceBuilder.size(searchParam.getPage().getSize());
 
-        SearchRequest searchRequest = new SearchRequestBuilder(client);
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        boolQueryBuilder.filter(QueryBuilders.termQuery("regionCode", searchParam.getRegionCode()));
+        boolQueryBuilder.filter(QueryBuilders.termQuery("categoryCode", searchParam.getCategoryCode()));
+        searchSourceBuilder.query(boolQueryBuilder);
+
+        searchSourceBuilder.sort(SortBuilders.fieldSort("campaignId").order(SortOrder.DESC));
+
+        SearchRequest searchRequest = new SearchRequest().indices(index)
+                                                         .searchType(SearchType.DEFAULT)
+                                                         .source(searchSourceBuilder);
+
+        return Mono.create(sink -> client.searchAsync(searchRequest, RequestOptions.DEFAULT, new ActionListener<SearchResponse>() {
+
+            @Override
+            public void onResponse(SearchResponse searchResponse) {
+
+                log.info("success. response={}", searchResponse.toString());
+                sink.success(searchResponse.toString());
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+                log.error("fail.", e);
+                sink.error(e);
+            }
+        }));
+    }
+
+    public Mono<String> delete(String index) {
+
+        DeleteRequest request = new DeleteRequest(index);
 
         return Mono.create(sink -> {
-            client.searchAsync();
+            try {
+                client.delete(request, RequestOptions.DEFAULT);
+                sink.success();
+            } catch (IOException e) {
+                sink.error(e);
+            }
         });
-    }*/
+    }
 }

@@ -23,7 +23,7 @@ public class Shop {
     private Boolean delete;
     private String categoryCode;
     private String address;
-    private String region3Code;
+    private String regionCode;
     private Location realLocation;
 
     private Long favoriteCount;
@@ -40,7 +40,7 @@ public class Shop {
         shopDto.setDelete(true);
         shopDto.setCategoryCode("1");
         shopDto.setAddress("강남역");
-        shopDto.setRegion3Code(String.valueOf(11680640));
+        shopDto.setRegionCode(String.valueOf(11680640));
         shopDto.setRealLocation(new Location(37.49799082, 127.02779625));
         shopDto.setFavoriteCount(456L);
         shopDto.setViewCount(111L);
@@ -75,7 +75,7 @@ public class Shop {
         builder.field("delete", this.getDelete());
         builder.field("categoryCode", this.getCategoryCode());
         builder.field("address", this.getAddress());
-        builder.field("region3Code", this.getRegion3Code());
+        builder.field("regionCode", this.getRegionCode());
         builder.latlon("realLocation", this.getRealLocation().getLat(), this.getRealLocation().getLon());
         builder.field("favoriteCount", this.getFavoriteCount());
         builder.field("viewCount", this.getViewCount());

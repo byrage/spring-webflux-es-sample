@@ -1,3 +1,6 @@
 package sample.webfluxes.core.exception;
 
-public class BulkFailedException extends RuntimeException {}
+public class BulkFailedException extends RuntimeException {
+
+    public BulkFailedException() {}
+}

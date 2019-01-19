@@ -21,10 +21,10 @@ GET http://localhost:8080/shop/12345
 GET http://localhost:8080/test
 
 ### create index
-POST http://localhost:8080/shop112
+POST http://localhost:8080/new_shop
 
 ### delta index
-POST http://localhost:8080/shoptest/delta
+POST http://localhost:8080/new_shop/delta
 Content-Type: application/json
 
 {
@@ -33,12 +33,25 @@ Content-Type: application/json
 
 
 ### full index
-POST http://localhost:8080/shop/full
+POST http://localhost:8080/new_shop/full
 Content-Type: application/json
 
 {
     "startId" : "1",
     "endId" : "10"
+}
+
+### search
+POST http://localhost:8080/new_shop/search
+Content-Type: application/json
+
+{
+    "regionCode" : "11680640",
+    "categoryCode" : "1",
+    "page" : {
+        "offset" : 0,
+        "size" : 100
+    }
 }
 
 ###
